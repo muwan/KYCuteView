@@ -59,6 +59,21 @@
 }
 
 - (void)displayLinkAction {
+    [self countDistance];
+    pointA = CGPointMake(x1 - r1 * cosDigree, y1 + r1 * sinDigree); // A
+    pointB = CGPointMake(x1 + r1 * cosDigree, y1 - r1 * sinDigree); // B
+    pointD = CGPointMake(x2 - r2 * cosDigree, y2 + r2 * sinDigree); // D
+    pointC = CGPointMake(x2 + r2 * cosDigree, y2 - r2 * sinDigree); // C
+    pointO = CGPointMake(pointA.x + (centerDistance / 2) * sinDigree,
+                         pointA.y + (centerDistance / 2) * cosDigree);
+    pointP = CGPointMake(pointB.x + (centerDistance / 2) * sinDigree,
+                         pointB.y + (centerDistance / 2) * cosDigree);
+    
+    [self drawRect];
+}
+
+- (void)countDistance
+{
     x1 = backView.center.x;
     y1 = backView.center.y;
     x2 = self.frontView.center.x;
@@ -74,19 +89,8 @@
     }
     
     r1 = oldBackViewFrame.size.width / 2 - centerDistance / self.viscosity;
-    
-    pointA = CGPointMake(x1 - r1 * cosDigree, y1 + r1 * sinDigree); // A
-    pointB = CGPointMake(x1 + r1 * cosDigree, y1 - r1 * sinDigree); // B
-    pointD = CGPointMake(x2 - r2 * cosDigree, y2 + r2 * sinDigree); // D
-    pointC = CGPointMake(x2 + r2 * cosDigree, y2 - r2 * sinDigree); // C
-    pointO = CGPointMake(pointA.x + (centerDistance / 2) * sinDigree,
-                         pointA.y + (centerDistance / 2) * cosDigree);
-    pointP = CGPointMake(pointB.x + (centerDistance / 2) * sinDigree,
-                         pointB.y + (centerDistance / 2) * cosDigree);
-    
-    [self drawRect];
-}
 
+}
 - (void)drawRect {
     backView.center = oldBackViewCenter;
     backView.bounds = CGRectMake(0, 0, r1 * 2, r1 * 2);
@@ -190,6 +194,8 @@
                              }
                              completion:^(BOOL finished) {
                                  if (finished) {
+                                     [self countDistance];
+                                     
                                      [self.frontView reset];
                                      
                                      backView.hidden = YES;
