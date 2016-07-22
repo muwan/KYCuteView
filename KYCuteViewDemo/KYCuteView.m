@@ -59,21 +59,7 @@
 }
 
 - (void)displayLinkAction {
-    x1 = backView.center.x;
-    y1 = backView.center.y;
-    x2 = self.frontView.center.x;
-    y2 = self.frontView.center.y;
-    
-    centerDistance = sqrtf((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-    if (centerDistance == 0) {
-        cosDigree = 1;
-        sinDigree = 0;
-    } else {
-        cosDigree = (y2 - y1) / centerDistance;
-        sinDigree = (x2 - x1) / centerDistance;
-    }
-    
-    r1 = oldBackViewFrame.size.width / 2 - centerDistance / self.viscosity;
+    [self countDistance];
     
     pointA = CGPointMake(x1 - r1 * cosDigree, y1 + r1 * sinDigree); // A
     pointB = CGPointMake(x1 + r1 * cosDigree, y1 - r1 * sinDigree); // B
@@ -158,6 +144,25 @@
     [self.frontView addGestureRecognizer:pan];
 }
 
+- (void)countDistance
+{
+    x1 = backView.center.x;
+    y1 = backView.center.y;
+    x2 = self.frontView.center.x;
+    y2 = self.frontView.center.y;
+    
+    centerDistance = sqrtf((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+    if (centerDistance == 0) {
+        cosDigree = 1;
+        sinDigree = 0;
+    } else {
+        cosDigree = (y2 - y1) / centerDistance;
+        sinDigree = (x2 - x1) / centerDistance;
+    }
+    
+    r1 = oldBackViewFrame.size.width / 2 - centerDistance / self.viscosity;
+}
+
 - (void)handleDragGesture:(UIPanGestureRecognizer *)ges {
     CGPoint dragPoint = [ges locationInView:self.containerView];
     
@@ -190,6 +195,8 @@
                              }
                              completion:^(BOOL finished) {
                                  if (finished) {
+                                     [self countDistance];
+                                     
                                      [self.frontView reset];
                                      
                                      backView.hidden = YES;
