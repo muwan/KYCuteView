@@ -195,8 +195,6 @@
                              }
                              completion:^(BOOL finished) {
                                  if (finished) {
-                                     [self countDistance];
-                                     
                                      [self.frontView reset];
                                      
                                      backView.hidden = YES;
@@ -204,6 +202,7 @@
                                      [shapeLayer removeFromSuperlayer];
                                      
                                      self.frontView.center = oldBackViewCenter;
+                                     [self countDistance];
                                      [self AddAniamtionLikeGameCenterBubble];
                                  }
                              }];
